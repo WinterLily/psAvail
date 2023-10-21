@@ -1,5 +1,14 @@
-
-
+#                   ___              _ __
+#       ____  _____/   |_   ______ _(_) /
+#      / __ \/ ___/ /| | | / / __ `/ / / 
+#     / /_/ (__  ) ___ | |/ / /_/ / / /  
+#    / .___/____/_/  |_|___/\__,_/_/_/   
+#   /_/                                  
+#________________________________________________   
+# Simple PowerShell Availability Testing Script
+#           By Winter Hundermark
+#   https://github.com/WinterLily/psAvail/
+#
 #
 ## Get the required IP address to poll 
 #
@@ -51,3 +60,6 @@ if ($portExists -eq 'true' -AND $ipExists -eq 'true') {
         }
     }
 }
+#
+## END 
+#
