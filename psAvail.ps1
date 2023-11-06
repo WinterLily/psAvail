@@ -41,6 +41,18 @@ while ($portExists -eq 'false') {
     }
 }
 #
+## Get the requested timeout
+#
+$defaultTimeOut = 2000
+#
+$userTimeOutPrompt = Read-Host "[?] Would you like to set a custom timeout? (y/n) [Default = [$($defaultTimeOut)ms]]"
+#
+if ($userTimeOutPrompt -eq 'y') {
+    $userTimeOut = Read-Host '[?] Please enter your desired timeout value:'
+} else {
+    $userTimeOut = $defaultTimeOut
+}
+#
 ## Initiate polling
 #
 if ($portExists -eq 'true' -AND $ipExists -eq 'true') {
@@ -50,10 +62,16 @@ if ($portExists -eq 'true' -AND $ipExists -eq 'true') {
 
     while($socketIsOpen -eq 'false') {
         try {
-            $socket = New-Object System.Net.Sockets.TcpClient($ipAddress, $port)
-            $socketIsOpen = 'true'
-            Write-Host "[+] Socket is open"
-            break
+            $socket = New-Object Net.Sockets.TcpClient
+            if (!$socket.ConnectAsync($ipAddress, $port).wait($userTimeOut)) {
+                Write-Host "[!] Port $port is closed on $ipAddress..."
+                Start-Sleep -Seconds 1
+            } else {
+                $socketIsOpen = 'true'
+                Write-Host "[+] Socket is open"
+                break
+            }
+
         } catch {
             Write-Host "[!] Port $port is closed on $ipAddress..."
             Start-Sleep -Seconds 1
